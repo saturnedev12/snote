@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:snote/model/api.dart';
 import 'package:snote/pages/home.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class Create extends StatefulWidget {
   @override
@@ -12,6 +13,15 @@ class _CreateState extends State<Create> {
   final _formKey = GlobalKey<FormState>();
   String title, content;
   Network model = new Network();
+  // create some values
+  Color pickerColor = Color(0xFFD79FF3);
+  Color currentColor = Color(0xFFDFACF8);
+
+  // ValueChanged<Color> callback
+  void changeColor(Color color) {
+    setState(() => pickerColor = color);
+    print(color.value);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +52,20 @@ class _CreateState extends State<Create> {
                       title = value;
                       return null;
                     },
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                    height: 100,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: BlockPicker(
+                      pickerColor: currentColor,
+                      onColorChanged: changeColor,
+                    ),
                   ),
                   SizedBox(
                     height: 5,
