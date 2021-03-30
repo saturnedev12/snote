@@ -167,7 +167,7 @@ class Grilles extends StatelessWidget {
                   ],
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.teal[100],
+                  color: Color(item['background']),
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
@@ -179,6 +179,7 @@ class Grilles extends StatelessWidget {
                         builder: (context) => Read(
                               title: item['title'],
                               content: item['content'],
+                              background: item['background'],
                             )));
               },
             )

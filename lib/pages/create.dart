@@ -96,7 +96,12 @@ class _CreateState extends State<Create> {
           if (_formKey.currentState.validate()) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text('Processing Data')));
-            var data = {'title': title, 'content': content, 'user_id': 1};
+            var data = {
+              'title': title,
+              'content': content,
+              'background': pickerColor.value,
+              'user_id': 1
+            };
             var response = await model.sendData(data, '/notes_register');
             var action = json.decode(response.body);
             print(action);

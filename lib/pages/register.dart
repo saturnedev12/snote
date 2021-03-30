@@ -46,6 +46,7 @@ class _RegisterState extends State<Register> {
                           filled: true,
                           hintText: 'name'),
                       validator: (value) {
+                        name = value;
                         return null;
                       },
                     ),
@@ -60,6 +61,7 @@ class _RegisterState extends State<Register> {
                           filled: true,
                           hintText: 'email'),
                       validator: (value) {
+                        email = value;
                         return null;
                       },
                     ),
@@ -101,15 +103,22 @@ class _RegisterState extends State<Register> {
                             'password': password,
                             'device_name': "samsung"
                           };
-                          var action = await model.sendData(data, '/login');
-                          print(jsonDecode(action.body));
-                          if (action.body['success']) {
+                          print('my data is : $data');
+                          var response =
+                              await model.sendData(data, '/register');
+                          var action = json.decode(response.body);
+                          print(action);
+                          //quand tout est bon
+                          if (action['success']) {
                             SharedPreferences localStorage =
                                 await SharedPreferences.getInstance();
-                            localStorage.setString('NAME', name);
-                            localStorage.setString('EMAIL', email);
                             localStorage.setString(
-                                'TOKEN', jsonDecode(action.body('token')));
+                                'NAME', json.encode(action['user']));
+                            localStorage.setString(
+                                'EMAIL', json.encode(action['email']));
+                            localStorage.setString(
+                                'TOKEN', json.encode(action['token']));
+
                             Navigator.push(
                               context,
                               new MaterialPageRoute(
