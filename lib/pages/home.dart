@@ -149,7 +149,8 @@ class Grilles extends StatelessWidget {
                       children: [
                         GestureDetector(
                           onTapUp: (TapUpDetails details) {
-                            showPopup(details.globalPosition);
+                            showPopup(details.globalPosition, item['id']);
+                            print(item['id']);
                           },
                           child: Icon(Icons.more_vert),
                         ),
@@ -189,7 +190,7 @@ class Grilles extends StatelessWidget {
   }
 }
 
-void showPopup(Offset offset) {
+void showPopup(Offset offset, int id) {
   PopupMenu menu = PopupMenu(
       backgroundColor: Colors.purpleAccent,
       // lineColor: Colors.tealAccent,
@@ -206,7 +207,15 @@ void showPopup(Offset offset) {
               color: Colors.white,
             )),
       ],
-      onClickMenu: onClickMenu,
+      onClickMenu: (MenuItemProvider item) {
+        Network modele = new Network();
+        print('Click menu -> ${item.menuTitle}');
+        if (item.menuTitle == 'supprimer') {
+          print('tu as cliqué sur suprimer');
+          var response = modele.getData('/delete_note/$id');
+          print(jsonEncode(response));
+        }
+      },
       stateChanged: stateChanged,
       onDismiss: onDismiss);
   menu.show(rect: Rect.fromPoints(offset, offset));
@@ -216,9 +225,14 @@ void stateChanged(bool isShow) {
   print('menu is ${isShow ? 'showing' : 'closed'}');
 }
 
-void onClickMenu(MenuItemProvider item) {
+/*void onClickMenu(MenuItemProvider item) {
+  Network model = new Network();
   print('Click menu -> ${item.menuTitle}');
-}
+  if (item.menuTitle == 'supprimer') {
+    print('tu as cliqué sur suprimer');
+    model.getData('/api/notes/${}');
+  }
+}*/
 
 void onDismiss() {
   print('Menu is dismiss');

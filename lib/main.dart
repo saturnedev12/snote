@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
     if (isAuth) {
       child = Home();
     } else {
-      child = Login();
+      child = Home();
     }
     return child;
   }

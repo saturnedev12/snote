@@ -17,6 +17,7 @@ class Network {
 
   getData(apiUrl) async {
     var fullUrl = _url + apiUrl;
+    print("l'url demandé est: $fullUrl");
     _getToken();
     var response = await http.get(fullUrl);
     return json.decode(response.body);
