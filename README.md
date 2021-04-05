@@ -1,12 +1,11 @@
 # snote
 
-A new Flutter project.
+application flutter for to take note that supporting markdown language. 
 
 ## Getting Started
+ this project is the simple and fast notes editor. for android and desktop. the notes are stored on a server and are set a day reel on the divices.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
+ project:
 
 - [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)

@@ -5,6 +5,10 @@ import 'package:snote/pages/home.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class Create extends StatefulWidget {
+  final String title, content;
+  final int color, id_note;
+  const Create({Key key, this.title, this.content, this.color, this.id_note})
+      : super(key: key);
   @override
   _CreateState createState() => _CreateState();
 }
@@ -16,11 +20,32 @@ class _CreateState extends State<Create> {
   // create some values
   Color pickerColor = Color(0xFFD79FF3);
   Color currentColor = Color(0xFFDFACF8);
-
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _contentController = TextEditingController();
+  String _url = '/notes_register';
   // ValueChanged<Color> callback
   void changeColor(Color color) {
     setState(() => pickerColor = color);
     print(color.value);
+  }
+
+  initState() {
+    setState(() {
+      becomeUpdate();
+    });
+    super.initState();
+  }
+
+  becomeUpdate() {
+    if (widget.title != null &&
+        widget.content != null &&
+        widget.color != null &&
+        widget.id_note != null) {
+      _titleController.text = widget.title;
+      _contentController.text = widget.content;
+      currentColor = Color(widget.color);
+      _url = '/update_note/${widget.id_note}';
+    }
   }
 
   @override
@@ -39,6 +64,7 @@ class _CreateState extends State<Create> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   TextFormField(
+                    controller: _titleController,
                     keyboardType: TextInputType.text,
                     //textInputAction: TextInputAction.done,
                     decoration: InputDecoration(
@@ -71,6 +97,7 @@ class _CreateState extends State<Create> {
                     height: 5,
                   ),
                   TextFormField(
+                    controller: _contentController,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     minLines: 200,
@@ -102,7 +129,7 @@ class _CreateState extends State<Create> {
               'background': pickerColor.value,
               'user_id': 1
             };
-            var response = await model.sendData(data, '/notes_register');
+            var response = await model.sendData(data, _url);
             var action = json.decode(response.body);
             print(action);
             Navigator.push(

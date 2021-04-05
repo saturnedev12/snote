@@ -25,6 +25,8 @@ class Network {
 
   sendData(data, apiUrl) async {
     var fullUrl = _url + apiUrl;
+    print("l'url post est: $fullUrl");
+
     return await http.post(
       fullUrl,
       body: jsonEncode(data),

@@ -5,6 +5,8 @@ import 'package:snote/model/api.dart';
 import 'dart:convert';
 import 'package:snote/pages/create.dart';
 import 'package:popup_menu/popup_menu.dart';
+import 'package:desktop_window/desktop_window.dart';
+import 'dart:io';
 
 class Home extends StatefulWidget {
   @override
@@ -25,6 +27,11 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      DesktopWindow.setWindowSize(Size(400, 600));
+      DesktopWindow.setMaxWindowSize(Size(700, 700));
+      //DesktopWindow.setMinWindowSize(Size(300, 300));
+    }
     _getUser();
     super.initState();
   }
@@ -149,7 +156,7 @@ class Grilles extends StatelessWidget {
                       children: [
                         GestureDetector(
                           onTapUp: (TapUpDetails details) {
-                            showPopup(details.globalPosition, item['id']);
+                            showPopup(details.globalPosition, item, context);
                             print(item['id']);
                           },
                           child: Icon(Icons.more_vert),
@@ -177,10 +184,10 @@ class Grilles extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Read(
+                        builder: (context) => Create(
                               title: item['title'],
                               content: item['content'],
-                              background: item['background'],
+                              color: item['background'],
                             )));
               },
             )
@@ -190,7 +197,8 @@ class Grilles extends StatelessWidget {
   }
 }
 
-void showPopup(Offset offset, int id) {
+void showPopup(Offset offset, dynamic datas, BuildContext context) {
+  print(datas['title']);
   PopupMenu menu = PopupMenu(
       backgroundColor: Colors.purpleAccent,
       // lineColor: Colors.tealAccent,
@@ -212,8 +220,22 @@ void showPopup(Offset offset, int id) {
         print('Click menu -> ${item.menuTitle}');
         if (item.menuTitle == 'supprimer') {
           print('tu as cliqué sur suprimer');
-          var response = modele.getData('/delete_note/$id');
+          var response = modele.getData("/delete_note/${datas['id']}");
           print(jsonEncode(response));
+          Navigator.push(
+              context, new MaterialPageRoute(builder: (context) => Home()));
+        }
+        if (item.menuTitle == 'modifier') {
+          print("modification en cours de $datas");
+          Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => Create(
+                        title: datas['title'],
+                        content: datas['content'],
+                        color: datas['background'],
+                        id_note: datas['id'],
+                      )));
         }
       },
       stateChanged: stateChanged,
