@@ -132,8 +132,7 @@ class _CreateState extends State<Create> {
             var response = await model.sendData(data, _url);
             var action = json.decode(response.body);
             print(action);
-            Navigator.push(
-                context, new MaterialPageRoute(builder: (context) => Home()));
+            Navigator.pop(context);
           }
         },
         child: Icon(Icons.done_all),

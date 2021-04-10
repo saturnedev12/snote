@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
 
   _checkAuth() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
-    var token = localStorage.getString('token');
+    var token; // = localStorage.getString('token');
     if (token != null) {
       isAuth = true;
     }

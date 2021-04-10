@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Network {
-  final String _url = 'http://localhost:8000/api';
+  final String _url = 'http://192.168.1.21:8000/api';
   var token;
   _headers() => {
         'Content-type': 'application/json',
@@ -12,7 +12,7 @@ class Network {
       };
   _getToken() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
-    token = jsonDecode(localStorage.getString('TOKEN'));
+    //token = jsonDecode(localStorage.getString('TOKEN'));
   }
 
   getData(apiUrl) async {

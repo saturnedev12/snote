@@ -21,7 +21,7 @@ class _HomeState extends State<Home> {
   int nbnotes = 0;
   _getUser() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
-    name = jsonDecode(localStorage.getString('NAME'));
+    // name = jsonDecode(localStorage.getString('NAME'));
     print("page home");
   }
 
@@ -72,8 +72,8 @@ class _HomeState extends State<Home> {
               ],
             ),
             Container(
-                width: 210,
-                height: 40,
+                width: 190,
+                height: 34,
                 //color: Colors.red,
                 child: TextField(
                   decoration: InputDecoration(
@@ -184,10 +184,10 @@ class Grilles extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Create(
+                        builder: (context) => Read(
                               title: item['title'],
                               content: item['content'],
-                              color: item['background'],
+                              background: item['background'],
                             )));
               },
             )
@@ -197,10 +197,11 @@ class Grilles extends StatelessWidget {
   }
 }
 
+//popup for more operation
 void showPopup(Offset offset, dynamic datas, BuildContext context) {
   print(datas['title']);
   PopupMenu menu = PopupMenu(
-      backgroundColor: Colors.purpleAccent,
+      backgroundColor: Color(datas['background']),
       // lineColor: Colors.tealAccent,
       maxColumn: 3,
       items: [

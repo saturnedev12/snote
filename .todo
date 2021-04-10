@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <todo version="0.1.20">
-    <note priority="veryhigh" time="1617199869">
-        possibilité de modiffier les notes
+    <note priority="veryhigh" time="1617651230">
+        independance par rapport au server
     </note>
 </todo>
