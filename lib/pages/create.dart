@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:snote/model/api.dart';
 import 'package:snote/pages/home.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Create extends StatefulWidget {
   final String title, content;
@@ -51,6 +52,10 @@ class _CreateState extends State<Create> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Ecrire une note'),
+        backgroundColor: Colors.purpleAccent,
+      ),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(3),
@@ -99,9 +104,9 @@ class _CreateState extends State<Create> {
                   TextFormField(
                     controller: _contentController,
                     keyboardType: TextInputType.multiline,
+                    textInputAction: TextInputAction.newline,
                     maxLines: null,
                     minLines: 200,
-                    textInputAction: TextInputAction.done,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -130,6 +135,10 @@ class _CreateState extends State<Create> {
               'user_id': 1
             };
             var response = await model.sendData(data, _url);
+            var notes = await model.getData('/notes/1');
+            SharedPreferences localStorage =
+                await SharedPreferences.getInstance();
+            localStorage.setString('NOTES', notes);
             var action = json.decode(response.body);
             print(action);
             Navigator.pop(context);

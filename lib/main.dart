@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snote/model/api.dart';
 import 'package:snote/pages/home.dart';
-import 'package:snote/pages/login.dart';
 import 'package:desktop_window/desktop_window.dart';
 
 Future resize() async {

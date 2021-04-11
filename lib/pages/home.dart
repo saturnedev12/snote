@@ -7,32 +7,54 @@ import 'package:snote/pages/create.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'dart:io';
+import 'dart:async';
 
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
 
-setNb() {}
-
 class _HomeState extends State<Home> {
   Network model = new Network();
+  List myNotes = [];
   String name;
   int nbnotes = 0;
-  _getUser() async {
+  //recuperation des donees
+  _getUserData() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
+    String res = localStorage.getString('NOTES');
+
+    if (res != null)
+      myNotes = await jsonDecode(res);
+    else
+      myNotes = [];
+
+    nbnotes = myNotes.length;
     // name = jsonDecode(localStorage.getString('NAME'));
     print("page home");
+    //return myNotes;
+  }
+
+  _getDataInside() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    String response = await model.getData('/notes/1');
+    if (localStorage.getString('NOTES') != response) {
+      localStorage.setString('NOTES', response);
+    }
+    setState(() {
+      _getUserData();
+    });
   }
 
   @override
   void initState() {
+    _getUserData();
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       DesktopWindow.setWindowSize(Size(400, 600));
       DesktopWindow.setMaxWindowSize(Size(700, 700));
       //DesktopWindow.setMinWindowSize(Size(300, 300));
     }
-    _getUser();
+    new Timer.periodic(Duration(seconds: 2), (Timer t) => _getDataInside());
     super.initState();
   }
 
@@ -80,6 +102,7 @@ class _HomeState extends State<Home> {
                       hintText: "rechercher une note",
                       hintStyle: TextStyle(
                         color: Colors.grey,
+                        fontSize: 13,
                       ),
                       suffixIcon: Icon(
                         Icons.search,
@@ -93,25 +116,7 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.white,
         centerTitle: true,
       ),
-      body: FutureBuilder(
-        future: model.getData('/notes/1'),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) print(snapshot.error);
-          List sn = snapshot.data;
-          nbnotes = sn.length;
-          return snapshot.hasData
-              ? Grilles(datas: snapshot.data)
-              : Column(
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      height: 300,
-                    ),
-                    CircularProgressIndicator(),
-                  ],
-                );
-        },
-      ),
+      body: Grilles(datas: myNotes),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.purpleAccent,
         child: Icon(Icons.add),
@@ -201,7 +206,7 @@ class Grilles extends StatelessWidget {
 void showPopup(Offset offset, dynamic datas, BuildContext context) {
   print(datas['title']);
   PopupMenu menu = PopupMenu(
-      backgroundColor: Color(datas['background']),
+      backgroundColor: Color(datas['background'] + 30),
       // lineColor: Colors.tealAccent,
       maxColumn: 3,
       items: [
@@ -248,6 +253,10 @@ void stateChanged(bool isShow) {
   print('menu is ${isShow ? 'showing' : 'closed'}');
 }
 
+void onDismiss() {
+  print('Menu is dismiss');
+}
+
 /*void onClickMenu(MenuItemProvider item) {
   Network model = new Network();
   print('Click menu -> ${item.menuTitle}');
@@ -255,8 +264,29 @@ void stateChanged(bool isShow) {
     print('tu as cliqué sur suprimer');
     model.getData('/api/notes/${}');
   }
-}*/
+  FutureBuilder(
+        future: model.getData('/notes/1'),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) print(snapshot.error);
+          List sn = snapshot.data;
+          nbnotes = sn.length;
+          return snapshot.hasData
+              ? Grilles(datas: snapshot.data)
+              : Column(
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      height: 300,
+                    ),
+                    CircularProgressIndicator(),
+                  ],
+                );
+        },
+      ),
+      import 'dart:async';
 
-void onDismiss() {
-  print('Menu is dismiss');
+main() {
+  new Timer.periodic(Duration(seconds: 2), (Timer t) => print('hi!'));
 }
+
+}*/
