@@ -125,6 +125,10 @@ class _CreateState extends State<Create> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          SharedPreferences localStorage = await SharedPreferences.getInstance();
+          var me = jsonDecode(localStorage.getString('USER'));
+          print(me);
+          var mid = me['id'];
           if (_formKey.currentState.validate()) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text('Processing Data')));
@@ -132,14 +136,11 @@ class _CreateState extends State<Create> {
               'title': title,
               'content': content,
               'background': pickerColor.value,
-              'user_id': 1
+              'user_id': mid
             };
+
             var response = await model.sendData(data, _url);
-            var notes = await model.getData('/notes/1');
-            SharedPreferences localStorage =
-                await SharedPreferences.getInstance();
-            localStorage.setString('NOTES', notes);
-            var action = json.decode(response.body);
+            var action = json.decode(response);
             print(action);
             Navigator.pop(context);
           }

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:snote/model/api.dart';
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:snote/pages/home.dart';
+//import 'dart:convert';
+//import 'package:shared_preferences/shared_preferences.dart';
+import 'package:snote/main.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -21,7 +21,7 @@ class _RegisterState extends State<Register> {
     return Scaffold(
       body: Container(
         padding: EdgeInsets.all(30),
-        color: Colors.blue,
+        color: Colors.purpleAccent,
         child: Center(
           child: Container(
             width: double.infinity,
@@ -110,22 +110,22 @@ class _RegisterState extends State<Register> {
                           print(action);
                           //quand tout est bon
                           if (action['success']) {
+                            print(action['user']);
                             SharedPreferences localStorage =
                                 await SharedPreferences.getInstance();
                             localStorage.setString(
-                                'NAME', json.encode(action['user']));
-                            localStorage.setString(
-                                'EMAIL', json.encode(action['email']));
+                                'USER', json.encode(action['user']));
                             localStorage.setString(
                                 'TOKEN', json.encode(action['token']));
 
                             Navigator.push(
                               context,
                               new MaterialPageRoute(
-                                  builder: (context) => Home()),
+                                  builder: (context) => MyApp()),
                             );
+                          } else {
+                            print(action["message"]);
                           }
-                          print("hello");
                         }
                       },
                       child: Text('register'),

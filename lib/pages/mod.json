@@ -1,0 +1,16 @@
+{
+  "success": true,
+  "token": "1|e26pMcrX6nIrYTt10IBZoMMAIEgM8k57khfIF0mH",
+  "user": [
+    {
+      "id": 1,
+      "name": "saturnin",
+      "email": "saturne.dev12@gmail.com",
+      "email_verified_at": null,
+      "password": "$2y$10$TQlr4zTRYtkZa8pS80Mq.uOMIvORE\/XWGsd6AedDyJ6Ivhj3KUO96",
+      "remember_token": null,
+      "created_at": "2021-04-12 16:23:47",
+      "updated_at": "2021-04-12 16:23:47"
+    }
+  ]
+}

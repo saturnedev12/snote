@@ -37,7 +37,11 @@ class _HomeState extends State<Home> {
 
   _getDataInside() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
-    String response = await model.getData('/notes/1');
+    print(localStorage.getString('TOKEN'));
+    var me = jsonDecode(localStorage.getString('USER'));
+    print(me);
+    var mid = me['id'];
+    String response = await model.getData('/notes/$mid');
     if (localStorage.getString('NOTES') != response) {
       localStorage.setString('NOTES', response);
     }
@@ -54,7 +58,7 @@ class _HomeState extends State<Home> {
       DesktopWindow.setMaxWindowSize(Size(700, 700));
       //DesktopWindow.setMinWindowSize(Size(300, 300));
     }
-    new Timer.periodic(Duration(seconds: 2), (Timer t) => _getDataInside());
+    new Timer.periodic(Duration(seconds: 1), (Timer t) => _getDataInside());
     super.initState();
   }
 

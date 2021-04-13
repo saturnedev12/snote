@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snote/model/api.dart';
 import 'package:snote/pages/home.dart';
 import 'package:desktop_window/desktop_window.dart';
+import 'package:snote/pages/login.dart';
 
 Future resize() async {
   await DesktopWindow.setMaxWindowSize(Size(400, 800));
@@ -25,6 +26,7 @@ class _MyAppState extends State<MyApp> {
   Network model = new Network();
   bool isAuth = false;
   initState() {
+    print('main page isAuth=$isAuth');
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       DesktopWindow.setWindowSize(Size(400, 600));
       DesktopWindow.setMaxWindowSize(Size(700, 700));
@@ -36,9 +38,14 @@ class _MyAppState extends State<MyApp> {
 
   _checkAuth() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
-    var token; // = localStorage.getString('token');
+    //if there is not token isAuth stay false
+    var token = localStorage.getString('TOKEN');
+    print(token);
+
     if (token != null) {
       isAuth = true;
+    }else{
+      isAuth = false;
     }
   }
 
@@ -46,9 +53,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     Widget child;
     if (isAuth) {
-      child = Home();
+      child = Login();
     } else {
-      child = Home();
+      child = Login();
     }
     return child;
   }
