@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:snote/pages/register.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snote/pages/home.dart';
+import 'fonction.dart';
 import 'package:snote/main.dart';
 //import 'dart:io' show Platform;
 //import 'package:device_info/device_info.dart';
@@ -14,6 +15,12 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  initSate() {
+    forpc();
+    verifiConnect(context);
+    super.initState();
+  }
+
   bool passwordVisible = true, isloading = false;
   var email, password, device_name;
   Network model = new Network();
@@ -21,6 +28,7 @@ class _LoginState extends State<Login> {
   final formKey = GlobalKey<FormState>();
   chargement(
       var mformKey, BuildContext mcontext, String memail, String mpassword) {
+    verifiConnect(context);
     print("en charge");
     return FutureBuilder(
       future: model.sendData(data, '/login'),
@@ -28,12 +36,12 @@ class _LoginState extends State<Login> {
         if (snapshot.hasError) print(snapshot.error);
 
         return snapshot.hasData
-            ? MyApp()
+            ? Home()
             : Scaffold(
                 body: Container(
                   width: double.infinity,
                   height: double.infinity,
-                  color: Colors.purpleAccent,
+                  color: Colors.blueGrey,
                   child: Center(
                     child: CircularProgressIndicator(),
                   ),
@@ -61,7 +69,7 @@ class _LoginState extends State<Login> {
       page = Scaffold(
         body: Container(
           padding: EdgeInsets.all(30),
-          color: Colors.purpleAccent,
+          color: Colors.blueGrey,
           child: Center(
             child: Container(
               width: double.infinity,
@@ -118,8 +126,9 @@ class _LoginState extends State<Login> {
                         },
                       ),
                       ElevatedButton(
-                        onPressed: () async{
-                          SharedPreferences localStorage = await SharedPreferences.getInstance();
+                        onPressed: () async {
+                          SharedPreferences localStorage =
+                              await SharedPreferences.getInstance();
                           //if there is not token isAuth stay false
                           var token = localStorage.getString('TOKEN');
                           print(token);

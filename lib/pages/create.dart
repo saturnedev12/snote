@@ -45,6 +45,7 @@ class _CreateState extends State<Create> {
       _titleController.text = widget.title;
       _contentController.text = widget.content;
       currentColor = Color(widget.color);
+      pickerColor = Color(widget.color);
       _url = '/update_note/${widget.id_note}';
     }
   }
@@ -54,7 +55,7 @@ class _CreateState extends State<Create> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Ecrire une note'),
-        backgroundColor: Colors.purpleAccent,
+        backgroundColor: Colors.blueGrey,
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -125,10 +126,7 @@ class _CreateState extends State<Create> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          SharedPreferences localStorage = await SharedPreferences.getInstance();
-          var me = jsonDecode(localStorage.getString('USER'));
-          print(me);
-          var mid = me['id'];
+          print("jessaie d'envoyer");
           if (_formKey.currentState.validate()) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text('Processing Data')));
@@ -136,17 +134,17 @@ class _CreateState extends State<Create> {
               'title': title,
               'content': content,
               'background': pickerColor.value,
-              'user_id': mid
+              'user_id': 1
             };
 
             var response = await model.sendData(data, _url);
             var action = json.decode(response);
-            print(action);
-            Navigator.pop(context);
+            print('reponse envoie: $action');
+            await Navigator.pop(context);
           }
         },
         child: Icon(Icons.done_all),
-        backgroundColor: Colors.purpleAccent,
+        backgroundColor: Colors.blueGrey,
       ),
     );
   }

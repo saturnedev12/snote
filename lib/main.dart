@@ -5,6 +5,7 @@ import 'package:snote/model/api.dart';
 import 'package:snote/pages/home.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:snote/pages/login.dart';
+import 'package:snote/pages/fonction.dart';
 
 Future resize() async {
   await DesktopWindow.setMaxWindowSize(Size(400, 800));
@@ -12,6 +13,7 @@ Future resize() async {
 }
 
 void main() {
+  forpc();
   runApp(MaterialApp(
     home: MyApp(),
   ));
@@ -27,11 +29,7 @@ class _MyAppState extends State<MyApp> {
   bool isAuth = false;
   initState() {
     print('main page isAuth=$isAuth');
-    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-      DesktopWindow.setWindowSize(Size(400, 600));
-      DesktopWindow.setMaxWindowSize(Size(700, 700));
-      //DesktopWindow.setMinWindowSize(Size(300, 300));
-    }
+    forpc();
     _checkAuth();
     super.initState();
   }
@@ -40,20 +38,19 @@ class _MyAppState extends State<MyApp> {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     //if there is not token isAuth stay false
     var token = localStorage.getString('TOKEN');
+    var user = localStorage.getString("USER");
     print(token);
 
-    if (token != null) {
+    if (token != null || token.isNotEmpty || user.isNotEmpty) {
       isAuth = true;
-    }else{
-      isAuth = false;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     Widget child;
-    if (isAuth) {
-      child = Login();
+    if (isAuth == true) {
+      child = Home();
     } else {
       child = Login();
     }
